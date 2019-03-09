@@ -2,7 +2,7 @@
 
 Ejemplo de movimiento de ratón usando la mano para la asignatura IPO 2019.
 
-Preview en: https://github.com/samuel-m-p/hand_detect_example/index.html
+Preview en: https://samuel-m-p.github.io/hand_detect_example/index.html
 
 ## Getting Started
 
