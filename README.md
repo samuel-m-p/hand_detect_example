@@ -1,22 +1,29 @@
 # hand_detect_example
 
-Ejemplo de movimiento de ratón usando la mano para la asignatura IPO 2019.
+Ejemplo de movimiento de ratón usando la mano para la asignatura IPO 2019
 
 Preview en: https://samuel-m-p.github.io/hand_detect_example/index.html
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+### Prerequisitos
 
-### Prerequisites
-
-What things you need to install the software and how to install them
+Probado en Firefox 65.0.2 (64-bits) y Chrome 72.0.3626.121 (Build oficial) (64-bits)
 
 ```
 Give examples
 ```
 
-### Installing
+### Instalacion
+
+Descargar el proyecto. La forma más sencilla es (Clone or Download => Download zip)
+Descomprimir y abrir el archivo 'index.html' en el navegador.
+
+```
+Nota: Debido a las restricciones a la hora de cargar el archivo xml del haarcascade, para hacer las pruebas en local he utilizado Firefox. Si usáis otros navegadores (ej. Chrome) obtendréis un error del tipo: Access to XMLHttpRequest at 'file:...' from origin 'null'.
+
+Para solucionarlo, debéis ejecutar un servidor de prueba local. Lo más simple: https://developer.mozilla.org/es/docs/Learn/Common_questions/set_up_a_local_testing_server
+```
 
 A step by step series of examples that tell you how to get a development env running
 
