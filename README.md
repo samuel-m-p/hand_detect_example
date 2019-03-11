@@ -6,6 +6,8 @@ Se puede probar en: https://samuel-m-p.github.io/hand_detect_example/index.html
 
 ## Cómo usarlo
 
+Permitir al navegador usar la cámara.
+
 Para que funcione, se debe poner la mano en posicion vertical como en esta imagen:
 
 
@@ -15,11 +17,9 @@ Si se situa el puntero verde (mano detectada) durante 2 segundos seguidos aproxi
 
 ### Prerequisitos
 
-Probado en Firefox 65.0.2 (64-bits) y Chrome 72.0.3626.121 (Build oficial) (64-bits)
+Una webcam :)
 
-```
-Give examples
-```
+Probado en Firefox 65.0.2 (64-bits) y Chrome 72.0.3626.121 (Build oficial) (64-bits)
 
 ### Descarga y ejecucion local
 
