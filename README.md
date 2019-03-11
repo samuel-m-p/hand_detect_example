@@ -2,9 +2,16 @@
 
 Ejemplo de movimiento de ratón usando la mano para la asignatura IPO 2019
 
-Preview en: https://samuel-m-p.github.io/hand_detect_example/index.html
+Se puede probar en: https://samuel-m-p.github.io/hand_detect_example/index.html
 
-## Getting Started
+## Cómo usarlo
+
+Para que funcione, se debe poner la mano en posicion vertical como en esta imagen:
+
+
+Cuando se detecta una mano, el puntero (círculo rojo) se vuelve verde.
+
+Si se situa el puntero verde (mano detectada) durante 2 segundos seguidos aproximadamente encima de un elemento que sea "clickable" se ejecuta el "click" en ese elemento.
 
 ### Prerequisitos
 
@@ -14,16 +21,28 @@ Probado en Firefox 65.0.2 (64-bits) y Chrome 72.0.3626.121 (Build oficial) (64-b
 Give examples
 ```
 
-### Instalacion
+### Descarga y ejecucion local
 
-Descargar el proyecto. La forma más sencilla es (Clone or Download => Download zip)
+Descargar el proyecto. La forma más sencilla es descargarlo via web (Clone or Download => Download zip)
 Descomprimir y abrir el archivo 'index.html' en el navegador.
 
-```
-Nota: Debido a las restricciones a la hora de cargar el archivo xml del haarcascade, para hacer las pruebas en local he utilizado Firefox. Si usáis otros navegadores (ej. Chrome) obtendréis un error del tipo: Access to XMLHttpRequest at 'file:...' from origin 'null'.
+*Nota: Debido a las restricciones a la hora de cargar el archivo xml del haarcascade, para hacer las pruebas en local he utilizado Firefox. Si usáis otros navegadores (ej. Chrome) obtendréis un error del tipo: Access to XMLHttpRequest at 'file:...' from origin 'null'.*
 
-Para solucionarlo, debéis ejecutar un servidor de prueba local. Lo más simple: https://developer.mozilla.org/es/docs/Learn/Common_questions/set_up_a_local_testing_server
+*Para solucionarlo, debéis ejecutar un servidor de prueba local. Lo más simple: https://developer.mozilla.org/es/docs/Learn/Common_questions/set_up_a_local_testing_server*
+
+## Modificar el proyecto
+
+Para incluir nuevos elementos, basta con añadirlos dentro del div que contiene el canvas de video, al igual que el resto de elementos
+
 ```
+<div class="canvas-container" id="container"> 
+		<a href="javascript:void" id="button1" class="button clickable" onclick='button1_click();'>Button 1</a> 
+    ... elemento
+    ... elemento
+<div>
+```
+
+A modo de ejemplo, el proyecto contiene 5 elementos además del canvas donde se muestra el video. 4 de ellos son de tipo 
 
 A step by step series of examples that tell you how to get a development env running
 
