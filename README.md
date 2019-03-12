@@ -46,7 +46,7 @@ Para incluir nuevos elementos y que queden por encima de la imagen de la cámara
 <div>
 ```
 
-A modo de ejemplo, el proyecto contiene 5 elementos (además del canvas donde se muestra el video). 4 de ellos son de tipo *<a href>* convertidos en botones y el otro es un botón normal inicialmente oculto. 
+A modo de ejemplo, el proyecto contiene 5 elementos (además del canvas donde se muestra el video). 4 de ellos son de tipo *a href* convertidos en botones y el otro es un botón normal inicialmente oculto. 
 
 ## 3. Cómo hacer elementos clickables
 
