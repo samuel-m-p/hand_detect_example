@@ -1,46 +1,56 @@
-// In this case, We set width 320, and the height will be computed based on the input stream.
-let width = 320;
-let height = 0;
-
-// whether streaming video from the camera.
-let streaming = false;
-
-let video = document.getElementById("video");
-let stream = null;
-let vc = null;
-let utils = new Utils('errorMessage'); //use utils class
-let faceCascadeFile = 'mano_abierta1.xml'; // path to xml
-let handCascade = null;
+var isHover = ""; //indica el boton sobre el que esta el raton
+var timeClick = 2; //Indica el tiempo (en seg) necesario para activar un click
+var clickTimer = null;
+var timeIddle = 1; //indica el tiempo sin detectar mano para resetear la deteccion de clicl
+var iddleTimer = null;
+var initialHover ="";
+var mouseState = "";
 
 
-let lastFilter = '';
-let src = null;
-let gray = null;
-//let handCascade = null;
-let dstC1 = null;
-let flipped = null;
-let canvasHandPos = null;
+// Tamano de la captura. Ancho a 320, y el alto se calcula a partir del stream de entrada.
+var width = 320;
+var height = 0;
 
-let handPos = {
+// variables para video
+var streaming = false;
+var video = document.getElementById("video");
+var stream = null;
+var vc = null;
+var utils = new Utils('errorMessage'); //use utils class
+var faceCascadeFile = 'mano_abierta1.xml'; // path al xml del detector
+var handCascade = null; //haarcascade
+var src = null;//imagenes opencv empleadas
+var gray = null;
+var flipped = null;
+
+var handPos = { //posicion de la mano detectada
 	x:0,
 	y:0,
 	width:0,
 	height:0,
 };
 
-let isHover = ""; //indica el boton sobre el que esta el raton
-let isHandDetected = 0; //indica el numero de frames en los que se ha detectado mano
 
+/**
+ * Callback cuando se hace click en 'button1'.
+ * Oculta 'button1' y muestra 'regular_button'.
+ */
+function button1_click(){
+	var el = document.getElementById("button1").style.display = "none";
+	var el1 = document.getElementById("regular_button").style.display = "block";
+}
+/**
+ * Callback cuando se hace click en 'regular_button'.
+ * Oculta 'regular_button' y muestra 'button1'.
+ */
+function regular_button_click(){
+	var el = document.getElementById("button1").style.display = "block";
+	var el1 = document.getElementById("regular_button").style.display = "none";
+}
 
-let timeClick = 2;
-var clickTimer = null;
-let timeIddle = 1;
-var iddleTimer = null;
-var lastHandPos = {x: -1, y: -1};
-var initialHover ="";
-var mouseState = "";
-
-
+/**
+ * Inicializa la captura de video
+ */
 function startCamera() {
   if (streaming) return;
   navigator.mediaDevices.getUserMedia({video: true, audio: false})
@@ -55,6 +65,7 @@ function startCamera() {
 
   video.addEventListener("canplay", function(ev){
     if (!streaming) {
+			//el alto de la captura se calcula a partir del stream de entrada y el ancho establecido
       height = video.videoHeight / (video.videoWidth/width);
       video.setAttribute("width", width);
       video.setAttribute("height", height);
@@ -65,29 +76,41 @@ function startCamera() {
   }, false);
 }
 
-
+/**
+ * Inicializa el procesamiento. 
+ * stopVideoProcessing se asegura de eliminar objetos existentes.
+ * Inicializa los objetos de OpenCV necesarios y llama a requestAnimationFrame que 
+ * solicite al navegador que programe el repintado de la ventana para el próximo ciclo. 
+ * Acepta como argumento una función a la que llamar antes de efectuar el repintado.
+ */
 function startVideoProcessing() {
   if (!streaming) { console.warn("Please startup your webcam"); return; }
   stopVideoProcessing();
   src = new cv.Mat(height, width, cv.CV_8UC4);
   flipped = new cv.Mat(height, width, cv.CV_8UC4);
   gray = new cv.Mat(height, width, cv.CV_8UC1);
-  //handCascade = new cv.CascadeClassifier();
-  canvasHandPos = new cv.Point(-1,-1);
-
-
-  //retval	=	cv.CascadeClassifier.empty(		);
-  
   requestAnimationFrame(processVideo);
 }
 
-
-function checkHandPos(){
-	if(initialHover == isHover)
-		document.getElementById(isHover).click();
+/**
+ * Funcion que salta al terminar el temporizador de click.
+ * Comprueba que el raton este encima del mismo elemento que al comenzar el temporizador.
+ * Si lo está, ejecuta click en ese elemento.
+ */
+function checkClick(){
+	var elemHoverId = document.getElementById(isHover);
+	if(initialHover == isHover){
+		if(elemHoverId != null && elemHoverId.style.display != "none"){
+			elemHoverId.click();
+		}
+	}
 	clickTimer = null;
 }
 
+/**
+ * Funcion que salta al terminar el temporizador de mano no detectada.
+ * Si no se detecta mano durante 'timeIddle' (segundos) resetea los temporizadores.
+ */
 function resetTimers(){
 	if(clickTimer!=null)
 	{
@@ -97,267 +120,266 @@ function resetTimers(){
 	iddleTimer = null;
 }
 
+/**
+ * Funcion de deteccion de mano en imagen con Opencv. 
+ * handCascade.detectMultiScale busca mano en la imagen y almacena las encontradas en el vector 'hands'.
+ * Si hay mano se almacena la posicion y tamano de la primera encontrada en 'handPos', se activa el temporizador de click
+ * y se cambia el estado del raton a "HAND_DETECT" y el icono del raton a verde si no lo estaba.
+ * Si no se detecta, activa el temporizador de 'iddle', y se cambia el estado del raton a "IDDLE" y el icono del raton a rojo.
+ */
 function detect() {
-//	let src = cv.imread('canvasInput');
-	//let dstC1 = src.clone();
-	canvasHandPos.x = -1;
-	canvasHandPos.y = -1;	
-	
+
 	if(handCascade!=null){
-    cv.cvtColor(flipped, gray, cv.COLOR_RGBA2GRAY, 0);
-	let hands = new cv.RectVector();
-	//let eyes = new cv.RectVector();
-	//let handCascade = new cv.CascadeClassifier();
-	//let eyeCascade = new cv.CascadeClassifier();
-	// load pre-trained classifiers
-	//handCascade.load('haarcascade_frontalface_default.xml');
-	//eyeCascade.load('haarcascade_eye.xml');
-	// detect hands
-	let msize = new cv.Size(0, 0);
-	
-	handCascade.detectMultiScale(gray, hands, 1.1, 3, 0, msize, msize);
-	
-	//console.log(hands.size());
-	//Cambiar el puntero del mouse
-	if(hands.size() > 0)
-	{
-		if(iddleTimer!=null)
-		{
-			window.clearTimeout(iddleTimer);
-			iddleTimer = null;
-		}
-		if (clickTimer == null) {
-			clickTimer = window.setTimeout(checkHandPos, 1000 * timeClick);
-			initialHover = isHover;
-			//console.log(lastHandPos.x);
-		}
-		if(mouseState != "HAND_DETECT"){
-			console.log("detected");
-			changeMouseIcon("HAND_DETECT");
-		}
-	}
-	else if(hands.size() == 0)
-	{
-		if (iddleTimer == null) {
-			iddleTimer = window.setTimeout(resetTimers, 1000 * timeIddle);
-		}
-		if( mouseState != "IDDLE")
-		{
-			changeMouseIcon("");
-			console.log("iddle");
-		}
-	}
-	
-	
-	for (let i = 0; i < hands.size(); ++i) {
-		let point1 = new cv.Point(hands.get(i).x, hands.get(i).y);
-		let point2 = new cv.Point(hands.get(i).x + hands.get(i).width,
-								  hands.get(i).y + hands.get(i).height);
-		cv.rectangle(flipped, point1, point2, [255, 0, 0, 255]);
+		cv.cvtColor(flipped, gray, cv.COLOR_RGBA2GRAY, 0);
 		
-		//Devolvemos coordenadas x y de la mano (en el centro del rectangulo)
-		//Nos quedamos solo con la primera mano encontrada en el array
-		//canvasHandPos.x = Math.round(hands.get(0).x + hands.get(0).width/2);
-		//canvasHandPos.y = Math.round(hands.get(0).y + hands.get(0).height/2);
-		handPos.x= hands.get(0).x;
-		handPos.y= hands.get(0).y;
-		handPos.width= hands.get(0).width;
-		handPos.height= hands.get(0).height;
-		
-	}
-	
-	hands.delete(); 
-	}
+		var hands = new cv.RectVector();
 
+		// detect hands
+		var msize = new cv.Size(0, 0);
 
+		handCascade.detectMultiScale(gray, hands, 1.1, 3, 0, msize, msize);
+
+		//console.log(hands.size());
+		//Cambiar el puntero del mouse
+		if(hands.size() > 0){
+			//Devolvemos coordenadas x y de la mano (en el centro del rectangulo)
+			//Nos quedamos solo con la primera mano encontrada en el array
+			handPos.x= hands.get(0).x;
+			handPos.y= hands.get(0).y;
+			handPos.width= hands.get(0).width;
+			handPos.height= hands.get(0).height;
+			
+			if(iddleTimer!=null){
+				window.clearTimeout(iddleTimer);
+				iddleTimer = null;
+			}
+			if (clickTimer == null){
+				clickTimer = window.setTimeout(checkClick, 1000 * timeClick);
+				initialHover = isHover;
+			}
+			//modificar el estado del raton
+			mouseState = "HAND_DETECT";
+
+		}
+		else if(hands.size() == 0){
+			if (iddleTimer == null){
+				iddleTimer = window.setTimeout(resetTimers, 1000 * timeIddle);
+			}
+			//modificar el estado del raton
+			mouseState = "IDDLE";
+		}
+
+		// //Dibuja un rectangulo encima de todas las manos encontradas
+		// for (var i = 0; i < hands.size(); ++i) {
+			// var point1 = new cv.Point(hands.get(i).x, hands.get(i).y);
+			// var point2 = new cv.Point(hands.get(i).x + hands.get(i).width,
+										// hands.get(i).y + hands.get(i).height);
+			// cv.rectangle(flipped, point1, point2, [255, 0, 0, 255]);
+		// }
+
+		hands.delete(); 
+	}
 }
 
-
-// shim layer with setTimeout fallback
-window.requestAnimFrame = (function(){
-  return  window.requestAnimationFrame       ||
-          window.webkitRequestAnimationFrame ||
-          window.mozRequestAnimationFrame    ||
-          window.ieRequestAnimationFrame     ||
-          function( callback ){
-            window.setTimeout(callback, 1000 / 60);
-          };
-})();
-var then = Date.now() / 1000;  // get time in seconds
-
-
+/**
+ * Bucle de procesamiento de video.
+ * En cada frame de procesamiento: 
+ * 			1- se lee una imagen de video en "src".
+ *			2- se voltea horizontalmente (efecto espejo) con "cv.flip" y se almacena en "flipped"
+ *			3- se llama a la funcion de deteccion de manos sobre la imagen volteada
+ *			4- si se ha detectado mano se mueve el raton
+ *			5- se comprueba el estado del raton por si hay que cambiar de icono o 
+ */
 function processVideo() {
 	if (streaming) {
-		  
-  vc.read(src);
+			
+		//Leer frame capturado y almacenarlo en 'src'
+		vc.read(src);
 
-  //Rotar horizontalmente la imagen capturada 
-  cv.flip(src, flipped, 1 );
-  //result = detect(src);
-  detect();
-  
-  cv.imshow("fullviewport", flipped);
-  
-  
-  //Calcular los FPS********************
-  
-  var now = Date.now() / 1000;  // get time in seconds
-    
-    // compute time since last frame
-    var elapsedTime = now - then;
-    then = now;
-    
-    // compute fps
-    var fps = 1 / elapsedTime;
- //Calcular los FPS********************
-  
-  
-  //Mover puntero
-  if(mouseState == "HAND_DETECT")
-	moveMouse();
-
-  //Comprobar estado del puntero
-  checkMouse();	
-
-
-  	}
-	
-  requestAnimationFrame(processVideo);
-
-}
-
- function checkMouse(){
-	 var buttons = document.getElementsByClassName('button');
-	 var theThingRect = theThing.getBoundingClientRect();
-	 
-	 //Comprobar posicion y cambiar aspecto
-	 for (let i = 0; i < buttons.length; ++i) {
-		 var domRect = buttons[i].getBoundingClientRect();
+		//Rotar horizontalmente la imagen capturada y almacenarla en 'flipped'
+		cv.flip(src, flipped, 1 );
 		
-		 if(theThingRect.left > domRect.left && theThingRect.right < domRect.right && theThingRect.bottom < domRect.bottom && theThingRect.top > domRect.top )
-		 {
-			 buttons[i].style.color = "#000000";
-			 buttons[i].style.backgroundColor = "#FFFFFF";
-			 isHover = buttons[i].id;
-			 break;
-		 }else{
-			 buttons[i].style.color = "#FFFFFF";
-			 buttons[i].style.backgroundColor = "";
-			 isHover = "";
-		 }
-	 }
-	 console.log(isHover);
-	  
+		//Detectar manos en la imagen
+		detect();
+
+		//Si se ha detectado mano, mover puntero
+		if(mouseState == "HAND_DETECT")
+			moveMouse();
+
+		//Comprobar estado del raton
+		checkMouse();	
+		
+		//Mostrar la imagen en el canvas
+		cv.imshow("fullviewport", flipped);
+	}
+
+	requestAnimationFrame(processVideo);
 }
 
-
-
+/**
+ * liberar memoria
+ */
 function stopVideoProcessing() {
   if (src != null && !src.isDeleted()) src.delete();
   if (gray != null && !gray.isDeleted()) gray.delete();
   //if (handCascade != null && !handCascade.isDeleted()) handCascade.delete();
-  if (dstC1 != null && !dstC1.isDeleted()) dstC1.delete();
-  if (canvasHandPos != null && !canvasHandPos.isDeleted()) canvasHandPos.delete();
   if (flipped != null && !flipped.isDeleted()) flipped.delete();
   if (utils != null) delete utils;
-
 }
 
-function stopCamera() {
-  if (!streaming) return;
-  stopVideoProcessing();
-  document.getElementById("canvasOutput").getContext("2d").clearRect(0, 0, width, height);
-  video.pause();
-  video.srcObject=null;
-  stream.getVideoTracks()[0].stop();
-  streaming = false;
-}
-
-
-
+/**
+ * Se llama cuando termina de cargar opencv.js (Ver index.html).
+ * Al ser una libreria grande se carga de forma asincrona, permitiendo que se muestren
+ * el resto de elementos
+ */
 function opencvIsReady() {
   console.log('OpenCV.js is ready');
-  
-//  initUI();
+	//una vez cargado Opencv, cargar el xml del clasificador
   handCascade = new cv.CascadeClassifier();
-// use createFileFromUrl to "pre-build" the xml
-utils.createFileFromUrl(faceCascadeFile, faceCascadeFile, () => {
-    handCascade.load(faceCascadeFile); // in the callback, load the cascade from file 
-});
-  
+	//usar createFileFromUrl para "pre-construir" el xml
+	utils.createFileFromUrl(faceCascadeFile, faceCascadeFile, () => {
+			handCascade.load(faceCascadeFile); // in the callback, load the cascade from file 
+	});
+
+	//una vez cargado el clasificador, inicializar la camara
   startCamera();
-
-// Get the canvas element form the page
-var canvas1 = document.getElementById("fullviewport");
- 
-/* Rresize the canvas to occupy the full page, 
-   by getting the widow width and height and setting it to canvas*/
- 
-canvas1.width  = window.innerWidth;
-canvas1.height = window.innerHeight;
-
 
 }
 
 
-//Mouse related functions
-
-var theThing = document.querySelector("#thing");
 
 
+var mousePointer = document.querySelector("#mousePointer");
+
+
+/**
+ * Mover la imagen del mouse relativo al viewport. Posicionar el centro de la imagen
+ * en el centro de la mano calculada
+ */
 function moveMouse() {
 	//Tamano del viewport
 	var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
 	var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+	
 	//Relacion aspecto viewport - canvas
 	arW = w / width;
 	arH = h / height;
 	
-	//mouseX = arW * canvasHandPos.x;
-	//mouseY = arH * canvasHandPos.y;
-	
-			// handPos.x=hands.get(0).x;
-		// handPos.y=hands.get(0).y;
-		// handPos.width=hands.get(0).width;
-		// handPos.height=hands.get(0).height;
-		
+	//Posicion de la mano respecto al viewport (En caso de que sea menor)
 	mouseX = arW * Math.round(handPos.x + handPos.width/2);
 	mouseY = arH * Math.round(handPos.y + handPos.height/2);
-			 console.log(mouseX);
-		 console.log(mouseY);
 	
-	
-	var width_offset = Math.round(theThing.offsetWidth);
-	var height_offset = Math.round(theThing.offsetHeight);
+	//Tamano de la imagen del puntero
+	var width_offset = Math.round(mousePointer.offsetWidth);
+	var height_offset = Math.round(mousePointer.offsetHeight);
 
+  //Calculo de la posicion centrada en la imagen
 	mouseX_centered = mouseX - Math.round(width_offset/2);
-	mouseY_centered = mouseY - Math.round(width_offset/2);
+	mouseY_centered = mouseY - Math.round(height_offset/2);
 
-	
-	theThing.style.left = mouseX_centered + "px";
-    theThing.style.top = mouseY_centered + "px";
-	
-	if(canvasHandPos.x > 0){
-		// console.log(w);
-		// console.log(h);
-		// console.log(canvasHandPos.x);
-		// console.log(canvasHandPos.y);
-	}
+  //Reposicionamiento (movimiento) del puntero
+	mousePointer.style.left = mouseX_centered + "px";
+	mousePointer.style.top = mouseY_centered + "px";
 }
 
+/**
+ * Cambia el icono del raton en funcion de su estado.
+ */
 function changeMouseIcon(state){
 	switch(state){
         case "HAND_DETECT":
-            document.getElementById("thing").src="images/puntero_verde.png";
-			mouseState = "HAND_DETECT";
+            mousePointer.src="images/puntero_verde.png";
             break;
         case "CLICK":
-            document.getElementById("thing").src="images/puntero_azul.png";
-			mouseState = "CLICK";
+            mousePointer.src="images/puntero_azul.png";
             break;
         default:
-            document.getElementById("thing").src="images/puntero_rojo.png";
-			mouseState = "IDDLE";
+            mousePointer.src="images/puntero_rojo.png";
     }
-	
 }
+
+/**
+ * Comprueba si el raton esta encima de un elemento "clickable" y de estarlo 
+ * le pone el focus.
+ */
+ function checkMouse(){	 
+ 
+	//Comprobar estado del raton y cambiar aspecto del puntero 
+	if(mouseState == "HAND_DETECT")
+		changeMouseIcon("HAND_DETECT");
+	else if( mouseState == "IDDLE")
+		changeMouseIcon("");
+			 
+	//Comprobar posicion y cambiar aspecto de los elementos de clase 'clickable'
+	var clickables = document.getElementsByClassName('clickable');
+	var mousePointerRect = mousePointer.getBoundingClientRect();
+	
+	//Calcular el centro del puntero
+	var mouseCenterX = mousePointerRect.x + Math.round(mousePointerRect.width/2)
+	var mouseCenterY = mousePointerRect.y + Math.round(mousePointerRect.height/2)
+
+	for (var i = 0; i < clickables.length; ++i) {
+	 if(clickables[i].style.display != "none"){
+		 var domRect = clickables[i].getBoundingClientRect();
+		 //Anadir el padding y el border al elemento para calcular el tamano del elemento
+		 var rectRight = domRect.left + clickables[i].offsetWidth;
+		 var rectBottom = domRect.top + clickables[i].offsetHeight;
+		 //Comprobar si el puntero esta encima de algun elemento clickcable
+		 if(mouseCenterX > domRect.left && mouseCenterX < rectRight && 
+				 mouseCenterY < rectBottom && mouseCenterY > domRect.top){
+			 //Si lo esta, darle poner focus
+			 clickables[i].focus();
+			 //Almacenar el id del elemento que esta con el focus
+			 isHover = clickables[i].id;
+			 break;
+		 }
+		 else{
+			 //Si no lo esta, quitar focus
+			 clickables[i].blur();
+			 	//Almacenar el id del elemento que esta con el focus
+			 isHover = "";
+		 }
+		}
+	}
+	   
+}
+
+
+
+/**
+ * Ejemplo en caso de querer incluir la opcion de parar la camara
+ */
+// function stopCamera() {
+  // if (!streaming) return;
+  // stopVideoProcessing();
+  // document.getElementById("canvasOutput").getContext("2d").clearRect(0, 0, width, height);
+  // video.pause();
+  // video.srcObject=null;
+  // stream.getVideoTracks()[0].stop();
+  // streaming = false;
+// }
+
+/**
+ * Ejemplo para calcular fps. Descomentar y llamar a getFPS en la funcion 'processVideo'
+ */
+// window.requestAnimFrame = (function(){
+  // return  window.requestAnimationFrame       ||
+          // window.webkitRequestAnimationFrame ||
+          // window.mozRequestAnimationFrame    ||
+          // window.ieRequestAnimationFrame     ||
+          // function( callback ){
+            // window.setTimeout(callback, 1000 / 60);
+          // };
+// })();
+// var then = Date.now() / 1000;  // get time in seconds
+
+// function getFPS(){   
+	// var now = Date.now() / 1000;  // get time in seconds
+	// // compute time since last frame
+	// var elapsedTime = now - then;
+	// then = now;
+	// // compute fps
+	// var fps = 1 / elapsedTime;
+	// return fps;
+// }
+
