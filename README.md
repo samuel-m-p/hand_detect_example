@@ -40,7 +40,7 @@ Para incluir nuevos elementos y que queden por encima de la imagen de la cámara
 
 ```
 <div class="canvas-container" id="container"> 
-		<a href="javascript:void" id="button1" class="button clickable" onclick='button1_click();'>Button 1</a> 
+   <a href="javascript:void" id="button1" class="button clickable" onclick='button1_click();'>Button 1</a> 
     ... elemento
     ... elemento
 <div>
