@@ -5,7 +5,7 @@ var timeIddle = 1; //indica el tiempo sin detectar mano para resetear la detecci
 var iddleTimer = null;
 var initialHover ="";
 var mouseState = "";
-
+ 
 
 // Tamano de la captura. Ancho a 320, y el alto se calcula a partir del stream de entrada.
 var width = 320;
