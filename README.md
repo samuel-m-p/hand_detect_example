@@ -14,7 +14,7 @@ Para que funcione, se debe poner la mano abierta en posicion vertical y con los 
 
 Cuando se detecta una mano, el puntero (círculo rojo) se vuelve verde y sigue a la mano.
 
-Si se situa el puntero (verde - mano detectada) durante 2 segundos seguidos aproximadamente encima de un elemento que sea "clickable" se ejecuta el "click" en ese elemento.
+Si se situa la mano (con puntero verde - mano detectada) durante 2 segundos seguidos aproximadamente encima de un elemento que sea "clickable" se ejecuta el "click" en ese elemento.
 
 *Nota: al ser un ejemplo simple, el tracking funciona bien con un fondo uniforme y buenas condiciones de iluminación. De otra forma es posible que el puntero de saltos.*
 
@@ -27,6 +27,7 @@ Probado en Firefox 65.0.2 (64-bits) y Chrome 72.0.3626.121 (Build oficial) (64-b
 ### Descarga y ejecucion local
 
 Descargar el proyecto. La forma más sencilla es descargarlo via web (Clone or Download => Download zip)
+
 Descomprimir y abrir el archivo 'index.html' en el navegador.
 
 *Nota: Debido a las restricciones a la hora de cargar el archivo xml del haarcascade, para hacer las pruebas en local he utilizado Firefox. Si usáis otros navegadores (ej. Chrome) obtendréis un error del tipo: Access to XMLHttpRequest at 'file:...' from origin 'null'.*
@@ -35,7 +36,7 @@ Descomprimir y abrir el archivo 'index.html' en el navegador.
 
 ## Cómo incluir/modificar elementos
 
-Para incluir nuevos elementos, basta con añadirlos dentro del div que contiene el canvas de video.
+Para incluir nuevos elementos y que queden por encima de la imagen de la cámara basta con añadirlos dentro del div que contiene el canvas de video.
 
 ```
 <div class="canvas-container" id="container"> 
@@ -45,11 +46,15 @@ Para incluir nuevos elementos, basta con añadirlos dentro del div que contiene 
 <div>
 ```
 
-A modo de ejemplo, el proyecto contiene 5 elementos además del canvas donde se muestra el video. 4 de ellos son de tipo 
+A modo de ejemplo, el proyecto contiene 5 elementos (además del canvas donde se muestra el video). 4 de ellos son de tipo *<a href>* convertidos en botones y el otro es un botón normal inicialmente oculto. 
 
-A step by step series of examples that tell you how to get a development env running
+### Cómo hacer elementos clickables
 
-Say what the step will be
+- Incluirlos con la clase *class="clickable"* en el html.
+- onclick='button1_click();
+
+Os he incluido tres ejemplos de elementos
+
 
 ```
 Give the example
