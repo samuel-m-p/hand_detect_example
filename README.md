@@ -8,13 +8,15 @@ Se puede probar en: https://samuel-m-p.github.io/hand_detect_example/index.html
 
 Permitir al navegador usar la cámara.
 
-Para que funcione, se debe poner la mano en posicion vertical como en esta imagen:
+Para que funcione, se debe poner la mano abierta en posicion vertical y con los dedos separados como en esta imagen:
 
 ![My image](capturas/hand_recon.jpg)
 
-Cuando se detecta una mano, el puntero (círculo rojo) se vuelve verde.
+Cuando se detecta una mano, el puntero (círculo rojo) se vuelve verde y sigue a la mano.
 
-Si se situa el puntero verde (mano detectada) durante 2 segundos seguidos aproximadamente encima de un elemento que sea "clickable" se ejecuta el "click" en ese elemento.
+Si se situa el puntero (verde - mano detectada) durante 2 segundos seguidos aproximadamente encima de un elemento que sea "clickable" se ejecuta el "click" en ese elemento.
+
+*Nota: al ser un ejemplo simple, el tracking funciona bien con un fondo uniforme y buenas condiciones de iluminación. De otra forma es posible que el puntero de saltos.*
 
 ### Prerequisitos
 
@@ -29,11 +31,11 @@ Descomprimir y abrir el archivo 'index.html' en el navegador.
 
 *Nota: Debido a las restricciones a la hora de cargar el archivo xml del haarcascade, para hacer las pruebas en local he utilizado Firefox. Si usáis otros navegadores (ej. Chrome) obtendréis un error del tipo: Access to XMLHttpRequest at 'file:...' from origin 'null'.*
 
-*Para solucionarlo, debéis ejecutar un servidor de prueba local. Lo más simple: https://developer.mozilla.org/es/docs/Learn/Common_questions/set_up_a_local_testing_server*
+*Para solucionarlo, debéis ejecutar un servidor de prueba local. Lo más simple es a través de una instalación de python: https://developer.mozilla.org/es/docs/Learn/Common_questions/set_up_a_local_testing_server*
 
-## Modificar el proyecto
+## Cómo incluir/modificar elementos
 
-Para incluir nuevos elementos, basta con añadirlos dentro del div que contiene el canvas de video, al igual que el resto de elementos
+Para incluir nuevos elementos, basta con añadirlos dentro del div que contiene el canvas de video.
 
 ```
 <div class="canvas-container" id="container"> 
