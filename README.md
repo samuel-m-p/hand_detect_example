@@ -36,7 +36,7 @@ Descomprimir y abrir el archivo 'index.html' en el navegador.
 
 ## Cómo incluir/modificar elementos
 
-Para incluir nuevos elementos y que queden por encima de la imagen de la cámara basta con añadirlos dentro del div que contiene el canvas de video.
+Para incluir nuevos elementos y que queden por encima de la imagen de la cámara basta con añadirlos en *index.html* dentro del div que contiene el canvas de video:
 
 ```
 <div class="canvas-container" id="container"> 
@@ -50,8 +50,34 @@ A modo de ejemplo, el proyecto contiene 5 elementos (además del canvas donde se
 
 ### Cómo hacer elementos clickables
 
-- Incluirlos con la clase *class="clickable"* en el html.
-- onclick='button1_click();
+- En *index.html*:
+-- Los elementos deben ser de clase *class="clickable"*.
+-- Añadir el nombre de la función javascript que hará los cambios en la página cuando salte el evento de click. Se pone en el atributo "onclick" del elemento.
+
+Ejemplo primer boton incluido en el html, es de clase *clickable* y llamará a la función *button1_click* cuando se pinche en él
+
+<a href="javascript:void" id="button1" class="button clickable" onclick='button1_click();'>Button 1</a> 
+
+- En javascript (fichero */js/hand_detect.js*):
+ 
+Aquí definís lo que queréis que ocurra al hacer click. A modo de ejemplo, la primera función del archivo hace que desaparezca el elemento con *id=button1* al hacer click en él y aparezca el botón *regular_button*:
+
+```
+function button1_click(){
+	var el = document.getElementById("button1").style.display = "none";
+	var el1 = document.getElementById("regular_button").style.display = "block";
+}
+```
+
+La segunda función hace lo mismo pero al revés
+
+```
+function regular_button_click(){
+	var el = document.getElementById("button1").style.display = "block";
+	var el1 = document.getElementById("regular_button").style.display = "none";
+}
+```
+
 
 Os he incluido tres ejemplos de elementos
 
