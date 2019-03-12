@@ -10,6 +10,7 @@ Permitir al navegador usar la cámara.
 
 Para que funcione, se debe poner la mano en posicion vertical como en esta imagen:
 
+![My image](samuel-m-p.github.io/hand_detect_example/capturas/hand_recon.jpg)
 
 Cuando se detecta una mano, el puntero (círculo rojo) se vuelve verde.
 
