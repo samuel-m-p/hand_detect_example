@@ -50,17 +50,31 @@ A modo de ejemplo, el proyecto contiene 5 elementos (además del canvas donde se
 
 ### Cómo hacer elementos clickables
 
-- En *index.html*:
--- Los elementos deben ser de clase *class="clickable"*.
--- Añadir el nombre de la función javascript que hará los cambios en la página cuando salte el evento de click. Se pone en el atributo "onclick" del elemento.
+- En *index.html* los elementos incluidos deben ser de clase *class="clickable"*
 
-Ejemplo primer boton incluido en el html, es de clase *clickable* y llamará a la función *button1_click* cuando se pinche en él
+Ejemplo incluido en *index.html*:
 
+```
+	<a href="https://studium.usal.es/" id="button2" class="button clickable">Button 2</a>
+```
+
+Es de clase *button* y *clickable*. La clase *button* es para darle estilo con CSS. 
+
+Al hacer click en el 'Button 2' nos envía a la página de studium.
+
+## Cómo incluir funcionalidad adicional al hacer click
+
+- En *index.html* añadir el nombre de la función javascript que hará los cambios en la página cuando salte el evento de click. Se pone en el atributo "onclick" del elemento.
+
+Como ejemplo, el primer 'boton' incluido en el html es de clase *clickable* y llamará a la función *button1_click()* cuando se pinche en él:
+
+```
 <a href="javascript:void" id="button1" class="button clickable" onclick='button1_click();'>Button 1</a> 
+```
 
-- En javascript (fichero */js/hand_detect.js*):
+- En el fichero javascript incluido en (*/js/hand_detect.js*):
  
-Aquí definís lo que queréis que ocurra al hacer click. A modo de ejemplo, la primera función del archivo hace que desaparezca el elemento con *id=button1* al hacer click en él y aparezca el botón *regular_button*:
+Aquí definís lo que queréis que ocurra al hacer click. A modo de ejemplo, la primera función del archivo (se llama igual *button1_click*) hace que desaparezca el elemento con *id=button1* al hacer click en él y aparezca el botón *regular_button*:
 
 ```
 function button1_click(){
@@ -69,9 +83,15 @@ function button1_click(){
 }
 ```
 
-La segunda función hace lo mismo pero al revés
+La segunda función incluida en */js/hand_detect.js* hace lo mismo pero al revés, y se lanza al pinchar en el elemento 
 
 ```
+html (index.html):
+
+<button type="button" id="regular_button" class="clickable" onclick='regular_button_click();'>I'M A REGULAR BUTTON</button>
+
+javascript (/js/hand_detect.js):
+
 function regular_button_click(){
 	var el = document.getElementById("button1").style.display = "block";
 	var el1 = document.getElementById("regular_button").style.display = "none";
