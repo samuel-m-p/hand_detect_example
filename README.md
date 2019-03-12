@@ -100,65 +100,31 @@ function regular_button_click(){
 }
 ```
 
+### 3.2. Cómo modificar el tiempo que se tarda en hacer click
 
-Os he incluido tres ejemplos de elementos
+Al comienzo del archivo javascript (/js/hand_detect.js) tenéis dos variables que podéis cambiar para modificar el tiempo necesario para hacer click:
+
+var timeClick = 2; //indica el tiempo (en seg) necesario para activar un click
+
+var timeIddle = 1; //indica el tiempo (en seg) sin detectar mano para resetear la deteccion de click
+
+- *timeClick*: es el tiempo que el puntero debe estar con mano detectada (verde) sobre un elemento para hacer click.
+
+- *timeIddle*: es el tiempo sin detectar mano para resetear el contador anterior. Impide que al dejar el puntero encima de un elemento sin detectar mano se lance el click automáticamente.
 
 
-```
-Give the example
-```
 
-And repeat
+## Enlaces
 
-```
-until finished
-```
+* [Python](http://www.dropwizard.io/1.0.2/docs/) - Instalar python con Anaconda (Windows)
+* [Maven](https://maven.apache.org/) - Opencv
+* [ROME](https://rometools.github.io/rome/) - 
 
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
-
-## Built With
-
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## Versioning
 
 We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
 
-## Authors
-
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
 ## License
 
