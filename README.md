@@ -4,7 +4,7 @@ Ejemplo de movimiento de ratón usando la mano para la asignatura IPO 2019
 
 Se puede probar en: https://samuel-m-p.github.io/hand_detect_example/index.html
 
-## Cómo usarlo
+## 1. Cómo usarlo
 
 Permitir al navegador usar la cámara.
 
@@ -18,13 +18,13 @@ Si se situa la mano (con puntero verde - mano detectada) durante 2 segundos segu
 
 *Nota: al ser un ejemplo simple, el tracking funciona bien con un fondo uniforme y buenas condiciones de iluminación. De otra forma es posible que el puntero de saltos.*
 
-### Prerequisitos
+### 1.1. Prerequisitos
 
 Una webcam :)
 
 Probado en Firefox 65.0.2 (64-bits) y Chrome 72.0.3626.121 (Build oficial) (64-bits)
 
-### Descarga y ejecucion local
+### 1.2. Descarga y ejecucion local
 
 Descargar el proyecto. La forma más sencilla es descargarlo via web (Clone or Download => Download zip)
 
@@ -34,7 +34,7 @@ Descomprimir y abrir el archivo 'index.html' en el navegador.
 
 *Para solucionarlo, debéis ejecutar un servidor de prueba local. Lo más simple es a través de una instalación de python: https://developer.mozilla.org/es/docs/Learn/Common_questions/set_up_a_local_testing_server*
 
-## Cómo incluir/modificar elementos
+## 2. Cómo incluir/modificar elementos
 
 Para incluir nuevos elementos y que queden por encima de la imagen de la cámara basta con añadirlos en *index.html* dentro del div que contiene el canvas de video:
 
@@ -48,7 +48,7 @@ Para incluir nuevos elementos y que queden por encima de la imagen de la cámara
 
 A modo de ejemplo, el proyecto contiene 5 elementos (además del canvas donde se muestra el video). 4 de ellos son de tipo *<a href>* convertidos en botones y el otro es un botón normal inicialmente oculto. 
 
-### Cómo hacer elementos clickables
+## 3. Cómo hacer elementos clickables
 
 - En *index.html* los elementos incluidos deben ser de clase *class="clickable"*
 
@@ -62,7 +62,7 @@ Es de clase *button* y *clickable*. La clase *button* es para darle estilo con C
 
 Al hacer click en el 'Button 2' nos envía a la página de studium.
 
-## Cómo incluir funcionalidad adicional al hacer click
+### 3.1. Cómo incluir funcionalidad adicional al hacer click
 
 - En *index.html* añadir el nombre de la función javascript que hará los cambios en la página cuando salte el evento de click. Se pone en el atributo "onclick" del elemento.
 
@@ -83,15 +83,15 @@ function button1_click(){
 }
 ```
 
-La segunda función incluida en */js/hand_detect.js* hace lo mismo pero al revés, y se lanza al pinchar en el elemento 
+La segunda función que aparece en */js/hand_detect.js* hace lo mismo pero al revés, y se lanza al pinchar en el elemento 
 
 ```
-html (index.html):
-
 <button type="button" id="regular_button" class="clickable" onclick='regular_button_click();'>I'M A REGULAR BUTTON</button>
+```
 
 javascript (/js/hand_detect.js):
 
+```
 function regular_button_click(){
 	var el = document.getElementById("button1").style.display = "block";
 	var el1 = document.getElementById("regular_button").style.display = "none";
