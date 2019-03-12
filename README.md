@@ -55,7 +55,7 @@ A modo de ejemplo, el proyecto contiene 5 elementos (además del canvas donde se
 Ejemplo incluido en *index.html*:
 
 ```
-	<a href="https://studium.usal.es/" id="button2" class="button clickable">Button 2</a>
+<a href="https://studium.usal.es/" id="button2" class="button clickable">Button 2</a>
 ```
 
 Es de clase *button* y *clickable*. La clase *button* es para darle estilo con CSS. 
@@ -85,13 +85,13 @@ function button1_click(){
 
 #### Otro ejemplo:
 
-La segunda función que aparece en */js/hand_detect.js* hace lo mismo pero al revés, y se lanza al pinchar en el elemento 
+La segunda función que aparece en */js/hand_detect.js* hace lo mismo pero al revés, y se lanza al pinchar en el elemento: 
 
 ```
 <button type="button" id="regular_button" class="clickable" onclick='regular_button_click();'>I'M A REGULAR BUTTON</button>
 ```
 
-javascript (/js/hand_detect.js):
+La funcion en javascript (/js/hand_detect.js):
 
 ```
 function regular_button_click(){
@@ -108,30 +108,18 @@ var timeClick = 2; //indica el tiempo (en seg) necesario para activar un click
 
 var timeIddle = 1; //indica el tiempo (en seg) sin detectar mano para resetear la deteccion de click
 
-- *timeClick*: es el tiempo que el puntero debe estar con mano detectada (verde) sobre un elemento para hacer click.
+- *timeClick*: es el tiempo (en seg) que el puntero debe estar con mano detectada (verde) sobre un elemento para hacer click.
 
-- *timeIddle*: es el tiempo sin detectar mano para resetear el contador anterior. Impide que al dejar el puntero encima de un elemento sin detectar mano se lance el click automáticamente.
-
-
+- *timeIddle*: es el tiempo (en seg) sin detectar mano para resetear el contador anterior. Impide que al dejar el puntero encima de un elemento sin detectar mano se lance el click automáticamente.
 
 ## Enlaces
 
 * [Python](http://www.dropwizard.io/1.0.2/docs/) - Instalar python con Anaconda (Windows)
-* [Maven](https://maven.apache.org/) - Opencv
-* [ROME](https://rometools.github.io/rome/) - 
-
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
-
+* [ROME](https://developer.mozilla.org/es/docs/Learn/Common_questions/set_up_a_local_testing_server) - Configurar un servidor de prueba local
+* [OpenCV](https://docs.opencv.org/3.4/d5/d10/tutorial_js_root.html) - Tutoriales de Opencv para javascript
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
-## Acknowledgments
 
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
