@@ -114,9 +114,11 @@ var timeIddle = 1; //indica el tiempo (en seg) sin detectar mano para resetear l
 
 ## Enlaces
 
-* [Python](http://www.dropwizard.io/1.0.2/docs/) - Instalar python con Anaconda (Windows)
+* [Python](http://www.dropwizard.io/1.0.2/docs/) - Instalar Python con Anaconda (Windows)
 * [ROME](https://developer.mozilla.org/es/docs/Learn/Common_questions/set_up_a_local_testing_server) - Configurar un servidor de prueba local
-* [OpenCV](https://docs.opencv.org/3.4/d5/d10/tutorial_js_root.html) - Tutoriales de Opencv para javascript
+* [OpenCV.js](https://docs.opencv.org/3.4/d5/d10/tutorial_js_root.html) - Tutoriales de OpenCV para javascript
+* [OpenCV](https://docs.opencv.org/3.4.0/d9/df8/tutorial_root.html) - Tutoriales de OpenCV 
+
 
 ## License
 
