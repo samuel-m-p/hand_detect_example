@@ -83,6 +83,8 @@ function button1_click(){
 }
 ```
 
+#### Otro ejemplo:
+
 La segunda función que aparece en */js/hand_detect.js* hace lo mismo pero al revés, y se lanza al pinchar en el elemento 
 
 ```
